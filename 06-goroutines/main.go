@@ -14,20 +14,20 @@ func main() {
 	fmt.Scanln(&input)
 }
 
-func counter(out chan int) {
+func counter(out chan<- int) {
 	for x := 0; ; x++ {
 		out <- x
 	}
 }
 
-func squarer(in, out chan int) {
+func squarer(in <-chan int, out chan<- int) {
 	for {
 		x := <-in
 		out <- x * x
 	}
 }
 
-func printer(in chan int) {
+func printer(in <-chan int) {
 	for {
 		fmt.Println(<-in)
 	}
