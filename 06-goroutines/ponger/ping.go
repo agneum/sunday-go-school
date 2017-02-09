@@ -20,8 +20,8 @@ func ponger(c chan string, pongChannel chan bool) {
 	for {
 		if <-pongChannel {
 			c <- "pong"
-			pongChannel <- false
 		}
+		pongChannel <- false
 	}
 }
 
