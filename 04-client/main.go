@@ -1,38 +1,45 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
-	"time"
+	"fmt"
 
 	"github.com/agneum/leanplum-go-client"
+	"github.com/agneum/leanplum-go-client/notifier"
+	"github.com/agneum/leanplum-go-client/user"
 )
 
 func main() {
+	// setUserAttributes()
+	// sendMessage()
+}
 
+// Usage: setUserAttributes
+func setUserAttributes() {
+	config := leanplum.ReadConfig("config.toml")
+
+	values := map[string]string{
+		"action":         "setUserAttributes",
+		"userId":         "1",
+		"userAttributes": "{\"unread_count\":5}",
+	}
+	leanplum_users.Start(config, values)
+}
+
+// Usage: SendMessage
+func sendMessage() {
 	query := leanplum.ReadConfig("config.toml")
 	values := map[string]string{
-		"expert_first_name":     "John",
-		"expert_last_name":      "Doe",
-		"expert_email":          "john@test.com",
-		"client_first_name":     "Mike",
-		"client_profil_pic_url": "",
-		"message_content":       "Hi John!",
-		"teep_id":               "123",
-		"demand_id":             "111",
+		"name": "John",
 	}
 
-	body, err := json.Marshal(leanplum.Message{Data: leanplum.MessageContent{Time: time.Now().Unix(), Values: values}})
-	if err != nil {
-		log.Fatalf("%v", err)
-		return
-	}
+	message := notifier.NewMessage("1", "4907543001825280")
+	message.SetMessageValues(values)
 
-	params := map[string]string{
-		"action":    "sendMessage",
-		"userId":    "1",
-		"messageId": "5891979810963456",
-	}
+	slice, _ := notifier.SendMessage(query, message)
 
-	leanplum.Post(query, body, params)
+	for _, v := range slice {
+		success, err := v.CheckErrors()
+
+		fmt.Println(success, err)
+	}
 }
