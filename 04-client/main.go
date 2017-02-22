@@ -18,11 +18,22 @@ func setUserAttributes() {
 	config := leanplum.ReadConfig("config.toml")
 
 	values := map[string]string{
-		"action":         "setUserAttributes",
-		"userId":         "1",
-		"userAttributes": "{\"unread_count\":5}",
+		"unread_count": "5",
+	}
+	valuesToAdd := map[string][]string{
+		"Interests": []string{"Tech", "Sports"},
 	}
 	leanplum_users.Start(config, values)
+	attributes := leanplum_users.NewAttributeContent("1")
+	attributes.SetAttribute("UserAttributes", values)
+	attributes.SetSliceOfAttributes("UserAttributesToAdd", valuesToAdd)
+	slice, _ := leanplum_users.SendAttributes(config, attributes)
+
+	for _, v := range slice {
+		success, err := v.CheckErrors()
+
+		fmt.Println(success, err)
+	}
 }
 
 // Usage: SendMessage
