@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	// setUserAttributes()
-	// sendMessage()
+	setUserAttributes()
+	sendMessage()
 }
 
 // Usage: setUserAttributes
@@ -38,15 +38,17 @@ func setUserAttributes() {
 
 // Usage: SendMessage
 func sendMessage() {
-	query := leanplum.ReadConfig("config.toml")
+	config := leanplum.ReadConfig("config.toml")
 	values := map[string]string{
-		"name": "John",
+		"name":      "John",
+		"course":    "Sunday Go School",
+		"community": "GolangNSK",
 	}
 
 	message := notifier.NewMessage("1", "4907543001825280")
 	message.SetMessageValues(values)
 
-	slice, _ := notifier.SendMessage(query, message)
+	slice, _ := notifier.SendMessage(config, message)
 
 	for _, v := range slice {
 		success, err := v.CheckErrors()
