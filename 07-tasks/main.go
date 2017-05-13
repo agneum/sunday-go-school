@@ -30,7 +30,7 @@ func init() {
 }
 
 func main() {
-	resultMap, err := scanFile(target.path)
+	resultMap, err := scanFile(target)
 
 	if err != nil {
 		fmt.Printf("%v", err)
@@ -41,10 +41,10 @@ func main() {
 	}
 }
 
-func scanFile(path string) (map[int]int, error) {
+func scanFile(p Params) (map[int]int, error) {
 	result := make(map[int]int)
 
-	file, err := os.Open(path)
+	file, err := os.Open(p.path)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func scanFile(path string) (map[int]int, error) {
 		if err != nil {
 			return nil, err
 		}
-		diff := target.n - number
+		diff := p.n - number
 		for i := range lines {
 			if lines[i] == diff {
 				result[number] = diff
