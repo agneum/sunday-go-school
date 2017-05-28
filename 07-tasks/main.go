@@ -35,10 +35,8 @@ func main() {
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
-	fmt.Printf("Total pairs: %v\n", len(resultMap))
-	for i, v := range resultMap {
-		fmt.Printf("%v + %v = %v \n", i, v, i+v)
-	}
+
+	printResult(resultMap)
 }
 
 func scanFile(p Params) (map[int]int, error) {
@@ -65,4 +63,11 @@ func scanFile(p Params) (map[int]int, error) {
 	}
 
 	return result, nil
+}
+
+func printResult(resultMap map[int]int) {
+	fmt.Printf("Total pairs: %v\n", len(resultMap))
+	for i, v := range resultMap {
+		fmt.Printf("%v + %v = %v \n", i, v, i+v)
+	}
 }
