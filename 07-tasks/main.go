@@ -42,8 +42,6 @@ func main() {
 }
 
 func scanFile(p Params) (map[int]int, error) {
-	result := make(map[int]int)
-
 	file, err := os.Open(p.path)
 	if err != nil {
 		return nil, err
@@ -51,7 +49,8 @@ func scanFile(p Params) (map[int]int, error) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	var lines []int
+	result := make(map[int]int)
+	tree := &Tree{}
 
 	for scanner.Scan() {
 		number, err := strconv.Atoi(scanner.Text())
@@ -59,12 +58,10 @@ func scanFile(p Params) (map[int]int, error) {
 			return nil, err
 		}
 		diff := p.n - number
-		for i := range lines {
-			if lines[i] == diff {
-				result[number] = diff
-			}
+		if tree.exists(diff) {
+			result[number] = diff
 		}
-		lines = append(lines, number)
+		tree.insert(number)
 	}
 
 	return result, nil
